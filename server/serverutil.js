@@ -7,22 +7,22 @@ const fs = require('fs');
 const path = require('path');
 
 const fetch = require('node-fetch');
-const promiseLocalIp = new Promise((resolve,reject)=>{
-    const network = require('network');
-    console.log("Checking local ip...");
-    network.get_private_ip((error,ip)=>{
-        console.log("Got IP",error,ip);
-        if(error){
-            reject(error);
-        }else{
-            resolve(ip);
-        }
-    })
-    /*const networkInterfaces = require('os').networkInterfaces();
-    const ipv4s = Object.keys(networkInterfaces).map(key => networkInterfaces[key]).flat().filter(networkInterface => networkInterface.family == "IPv4" && !networkInterface.internal);
+const getLocalIp = () => {
+    const networkInterfaces = require('os').networkInterfaces();
+    const ipv4s = Object.keys(networkInterfaces)
+        .map(key => networkInterfaces[key])
+        .flat()
+        .filter(networkInterface => (networkInterface.family == "IPv4" || networkInterface.family == 4) && !networkInterface.internal);
     if(ipv4s.length == 0) return null;
 
-    return ipv4s.slice(-1)[0].address;*/
+    const privateIp = ipv4s.find(networkInterface => /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(networkInterface.address));
+    return (privateIp || ipv4s[0]).address;
+}
+const promiseLocalIp = new Promise(resolve=>{
+    console.log("Checking local ip...");
+    const ip = getLocalIp();
+    console.log("Got IP",ip);
+    resolve(ip);
 });
 export class UtilServer{
     static async imageToFilePath(id,imageString,authToken){

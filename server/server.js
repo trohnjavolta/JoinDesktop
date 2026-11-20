@@ -5,6 +5,7 @@ const {GCMServer} = require("./gcmserver.js");
 const {ClipboardChecker} = require("./clipboardchecker.js");
 const { globalShortcut,ipcMain ,app,nativeImage,BrowserWindow,Tray,Menu, MenuItem,nativeTheme,screen } = require('electron')
 const {GoogleAuth} = require('./googleauth.js');
+const {ServerPush} = require('./serverpush.js');
 const {ServerNotification} = require('./servernotification.js');
 const {EventBus} = require("../v2/eventbus.js")
 import { DevicesServer } from "./serverdevices.js";
@@ -210,6 +211,9 @@ class Server{
             // console.log("Received gcmraw from page",gcmRaw)
             await this.sendToPage(gcmRaw);
         });
+        ipcMain.on("mydeviceid",(event)=>{
+            event.returnValue = ServerPush.deviceId;
+        });
         ipcMain.on("openurl",async (event,url)=>{
             UtilServer.openUrlOrFile(url);
         });
@@ -236,6 +240,13 @@ class Server{
         
         // ServerNotification.show({title:"Join Companion App1",body:"Now running1!"});
         this.autoUpdater.checkForUpdate();
+        this.push = new ServerPush({
+            onMessage: content => this.sendToPage(content),
+            onDeviceIdChanged: async () => {
+                this.window.webContents.send('usersignedin');
+            }
+        });
+        this.push.start().catch(error=>console.error("Couldn't start push receiver",error));
         return this.window;
         // const path = require('path');
     }

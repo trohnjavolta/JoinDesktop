@@ -68,7 +68,7 @@ class GoogleAuth{
             redirect_uri: redirectUri,
             response_type: "code",
             access_type: "offline",
-            prompt: "consent",
+            prompt: "select_account consent",
             scope: scopes.join(" ")
         });
         return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
@@ -90,6 +90,9 @@ class GoogleAuth{
         // console.log("Sending to google auth code", options);
         const result = await fetch("https://oauth2.googleapis.com/token",options);
         const authDataRaw = await result.json();
+        if(!authDataRaw.access_token){
+            throw new Error(`Google sign-in failed: ${authDataRaw.error_description || authDataRaw.error || "no access token received"}`);
+        }
         // console.log("Result from google auth code", authDataRaw);
         console.log("Stored Auth Data");
         GoogleAuth.authData = authDataRaw;
