@@ -11,7 +11,7 @@ contextBridge.exposeInMainWorld(
   "api", {
       send: (channel, data) => {
           // whitelist channels
-          let validChannels = ["openurl","authToken","notification","gcm","devices","setting","eventbus"];
+          let validChannels = ["openurl","authToken","notification","gcm","devices","setting","eventbus","signin"];
           if (validChannels.includes(channel)) {
               ipcRenderer.send(channel, data);
           }

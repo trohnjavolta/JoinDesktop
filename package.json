@@ -2,7 +2,7 @@
   "name": "com.joaomgcd.join",
   "productName": "Join Desktop",
   "homepage": "https://joaoapps.com/join/desktop",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "A companion app for the Join website",
   "main": "main_esm.js",
   "scripts": {
@@ -30,9 +30,8 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.52",
     "@electron-forge/maker-zip": "^6.0.0-beta.52",
     "electron": "^9.0.5",
-    "electron-builder": "latest",
-    "electron-installer-dmg": "^3.0.0",
-    "electron-builder-squirrel-windows": "^22.7.0"
+    "electron-builder": "24.9.1",
+    "electron-installer-dmg": "^3.0.0"
   },
   "dependencies": {
     "auto-launch": "^5.0.5",
@@ -74,15 +73,17 @@
     "win": {
       "target": [
         "portable",
-        "squirrel"
+        "nsis"
       ],
       "icon": "build/icon.ico"
     },
     "portable": {
       "artifactName": "join_portable.exe"
     },
-    "squirrelWindows": {
-      "loadingGif": "joinloading.png"
+    "nsis": {
+      "artifactName": "Join.Desktop.Setup.${version}.exe",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   },
   "config": {

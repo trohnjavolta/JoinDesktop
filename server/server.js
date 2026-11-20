@@ -213,6 +213,12 @@ class Server{
         ipcMain.on("openurl",async (event,url)=>{
             UtilServer.openUrlOrFile(url);
         });
+        ipcMain.on("signin",async (event,{port})=>{
+            const redirectUri = `http://127.0.0.1:${port}`;
+            const url = GoogleAuth.getAuthUrl(redirectUri);
+            console.log("Opening Google sign-in",url);
+            UtilServer.openUrlOrFile(url);
+        });
         ipcMain.on("devices",async (event,raw)=>{
             DevicesServer.devices = raw;
         });
@@ -419,9 +425,9 @@ class Server{
     async sendToPageEventBus(object){
         await this.window.webContents.send('eventbus', {data:object,className:object.constructor.name});
     }
-    async handleAuthenticationRequest({code,res}){       
+    async handleAuthenticationRequest({code,res,redirectUri}){
         try{
-            const authData = await GoogleAuth.storeAuthData(code)   
+            const authData = await GoogleAuth.storeAuthData(code,redirectUri)   
             const isExpired = authData.isExpired;      
             console.log("Is Expired",isExpired);  
             if(!isExpired){
@@ -445,7 +451,7 @@ class Server{
         console.log(req.method,req.url)
         const code = queryData.code;
         if(code){
-            return await this.handleAuthenticationRequest({code:queryData.code,res})
+            return await this.handleAuthenticationRequest({code:queryData.code,res,redirectUri:`http://${req.headers.host}`})
         }
 
         try{
