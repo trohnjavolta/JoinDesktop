@@ -39,6 +39,7 @@ jobs:
         with:
           tag_name: windows-build-${{ github.run_number }}
           name: Join Desktop Windows Build ${{ github.run_number }}
+          make_latest: true
           body: |
             Automatically built Windows version of Join Desktop with the fixed Google sign-in.
 
@@ -60,3 +61,35 @@ jobs:
           files: |
             dist/join_portable.exe
             dist/Join.Desktop.Setup.*.exe
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps --ignore-scripts
+
+      - name: Build DEB
+        run: npx electron-builder build --linux deb --x64 --publish never
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: join-desktop-linux
+          path: dist/*.deb
+
+      - name: Create release (rolling build)
+        if: github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: linux-build-${{ github.run_number }}
+          name: Join Desktop Linux Build ${{ github.run_number }}
+          make_latest: false
+          body: |
+            Join Desktop for Debian/Ubuntu (64 bit, amd64) as .deb package.
+          files: dist/*.deb

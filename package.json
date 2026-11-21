@@ -3,6 +3,10 @@
   "productName": "Join Desktop",
   "homepage": "https://joaoapps.com/join/desktop",
   "version": "1.2.0",
+  "author": {
+    "name": "trohnjavolta",
+    "email": "fabianrumer90@gmail.com"
+  },
   "description": "A companion app for the Join website",
   "main": "main_esm.js",
   "scripts": {
@@ -73,8 +77,9 @@
     },
     "linux": {
       "icon": "build/icon.png",
+      "category": "Utility",
+      "maintainer": "trohnjavolta <fabianrumer90@gmail.com>",
       "target": [
-        "AppImage",
         "deb"
       ]
     },
