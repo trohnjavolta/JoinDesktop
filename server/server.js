@@ -160,7 +160,9 @@ class Server{
             tray.on("click",async()=>{
                 await this.bringWindowToFront();
             });
+            tray.setToolTip("Join Desktop");
             tray.setContextMenu(Menu.buildFromTemplate([
+                new MenuItem({ label: 'Open Join', type: 'normal', click:()=>this.bringWindowToFront() }),
                 new MenuItem({ label: 'Exit', type: 'normal', click:()=>this.onCloseAppClicked() })
             ]))
         }
@@ -173,7 +175,7 @@ class Server{
             this.sendToPageEventBus(new ClipboardChanged(text));
         });
         this.clipboardChecker.start();
-        const appPath = process.execPath;
+        const appPath = process.env.PORTABLE_EXECUTABLE_FILE || process.execPath;
         console.log(`Instancing AutoLaunch for path ${appPath}`);
         this.autoLaunch = new AutoLaunch({
             name: 'Join Desktop',

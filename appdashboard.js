@@ -334,7 +334,6 @@ export class AppDashboard extends App{
     }
     async load(){
         AppContext.context.allowUnsecureContent = true;
-        window.oncontextmenu = () => ServerEventBus.post(new RequestToggleDevOptions());
         // AppGCMHandler.handlePushUrl = (push)=> {
         //     const url = push.url;
         //     if(!url) return;

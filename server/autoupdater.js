@@ -59,7 +59,7 @@ export class AutoUpdater{
                 let appVersion = appInfo.version;
                 //appVersion = "0.0.1";
                 console.log("App Info", appInfo);
-                const fetchResult = await fetch("https://raw.githubusercontent.com/joaomgcd/JoinDesktop/master/package.json");
+                const fetchResult = await fetch("https://raw.githubusercontent.com/trohnjavolta/JoinDesktop/master/package.json");
                 const packageInfoFromGithub = await fetchResult.json();
                 const versionFromGithub = packageInfoFromGithub.version;
                 console.log("Package version from github", versionFromGithub);
@@ -74,7 +74,7 @@ export class AutoUpdater{
                 if(appInfo.isLinuxSystem){
                     downloadLinkEnd = `Join.Desktop-${versionFromGithub}.AppImage`;
                 }
-                const downloadLink = `https://github.com/joaomgcd/JoinDesktop/releases/download/v${versionFromGithub}/${downloadLinkEnd}`;
+                const downloadLink = `https://github.com/trohnjavolta/JoinDesktop/releases/latest/download/${downloadLinkEnd}`;
                 const urlExists = (await fetch(downloadLink,{method:"HEAD"})).status != 404
                 console.log("URL exists",downloadLink,urlExists)
                 if(!urlExists) return null;

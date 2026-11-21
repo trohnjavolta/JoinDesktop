@@ -48,6 +48,12 @@
     "url-exist": "^2.0.2"
   },
   "build": {
+    "files": [
+      "**/*",
+      "!dist/**",
+      "!dist-test/**",
+      "!.abacusai/**"
+    ],
     "asarUnpack": [
       "./node_modules/node-notifier/**"
     ],

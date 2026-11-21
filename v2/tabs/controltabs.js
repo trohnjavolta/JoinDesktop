@@ -195,6 +195,7 @@ export class ControlTabTitle extends Control{
                 height: 32px;
                 cursor: pointer;
                 font-weight: bold;
+                font-size: larger;
                 display: flex;                
                 align-items: center;
                 padding: 8px;

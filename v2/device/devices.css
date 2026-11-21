@@ -22,7 +22,7 @@
     margin-top: 5px;
     flex-direction: column;
     align-items: center;
-    width: 70px;
+    width: 90px;
     opacity: 0.4;
     cursor: pointer;
 }
@@ -34,9 +34,16 @@
     opacity: 1;
 }
 .devicename{    
-    font-size: small;
+    font-size: medium;
     font-weight: bold;
-    word-break: break-all;
+    max-width: 100%;
+    text-align: center;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .devicelocalnetwork{
@@ -73,7 +80,7 @@
 
 @media only screen and (min-width: 600px) {
     #devicestabroot #devices{
-        width: 220px;
+        width: 290px;
     }
 }
 @media only screen and (min-width: 1300px) {    

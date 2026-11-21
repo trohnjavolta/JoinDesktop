@@ -25,6 +25,24 @@
 #appname{    
     display: none;
 }
+#appname.clickable{
+    display: block;
+    cursor: pointer;
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 4px 4px 4px 12px;
+    margin-left: 16px;
+    border-left: 1px solid rgba(255,255,255,0.5);
+}
+#appnamearrowdown.clickable{
+    cursor: pointer;
+}
+#appnamearrowdown svg{
+    width: 28px !important;
+    height: 28px !important;
+}
 #imagemenu{
     cursor: pointer;
     display: none;
@@ -62,9 +80,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 16px;
+    margin-right: 72px;
 }
-#userimage{
+#header #userimage{
+	width: 32px;
+	height: 32px;
+	object-fit: cover;
 	border-radius: 50%;
     cursor: pointer;
     margin-left: 8px;
@@ -123,14 +144,20 @@
 #closeapp:hover, #minimizeapp:hover{
     background-color: var(--theme-accent-color-light);
 }
+#closeapp, #minimizeapp{
+    font-size: 22px;
+    line-height: 22px;
+    width: 28px;
+    text-align: center;
+}
 #minimizeapp{
-    right: 14px;
+    right: 28px;
 }
 #topversion{    
     position: absolute;
     bottom: 2px;
-    right: 2px;
-    font-size: 60%;
+    right: 6px;
+    font-size: 70%;
 }
 @keyframes rotating {
 	from {	transform: rotate(0deg);	}
@@ -154,7 +181,7 @@
         padding-right: 0px;
     }
     #headerright{    
-        margin-right: 0px;
+        margin-right: 60px;
     }
     #userimage{
         display: none;

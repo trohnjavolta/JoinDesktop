@@ -119,7 +119,6 @@ export class App{
         // const darkColor = UtilDOM.increaseBrightnessRule(rootStyle,"--theme-accent-color",-20);
         // UtilDOM.setCssVariable("theme-accent-color-light",lightColor);
         // UtilDOM.setCssVariable("theme-accent-color-dark",darkColor);
-        UtilDOM.addStyle(`@import url('https://fonts.googleapis.com/css?family=Roboto');`); 
             
 
 
