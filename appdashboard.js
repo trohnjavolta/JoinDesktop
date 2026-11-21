@@ -82,10 +82,10 @@ class GoogleAccountDashboard{
     async signOut(){
         await GoogleAccountDashboard.signIn(true);
     }
-    static async signIn(signOutFirst){        
-        if(signOutFirst){            
+    static async signIn(signOutFirst){
+        if(signOutFirst){
             await GoogleAccountDashboard.resetUser();
-            await ControlDialogOk.showAndWait({title:"Signing Out",text:"Please sign in to another account on the Join website."});
+            await ControlDialogOk.showAndWait({title:"Signing Out",text:"Please sign in to another account on the Google sign-in page that opens next."});
         }
         const setting = new SettingCompanionAppPortToReceive();
         let value = await setting.value;
@@ -100,14 +100,10 @@ class GoogleAccountDashboard{
             content: `Please wait while Join signs you in...`,
             parent: this.contentElement
         });
-        if(!signOutFirst){
-            await ControlDialogOk.showAndWait({title:"Not Signed In",text:"Join will now sign you in via the Join website..."});
-        }
-        let url = `${self.joinServer}?settings&connectoport=${value}`;
-        if(signOutFirst){
-            url += "&signOutCompanion=1";
-        }
-        ServerCommands.openPage(url);
+        await ControlDialogOk.showAndWait({title:"Not Signed In",text:"Join will now open your browser to sign in with Google.<br/><br/>Sign in on the Google page and allow access. Join Desktop will then continue automatically."});
+        //Signs in directly against Google instead of going through the Join website,
+        //whose sign-in requests scopes that Google no longer allows to be combined.
+        window.api.send("signin",{port:value});
     }
 }
 class FCMClientDashboard{

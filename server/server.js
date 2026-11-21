@@ -5,6 +5,7 @@ const {GCMServer} = require("./gcmserver.js");
 const {ClipboardChecker} = require("./clipboardchecker.js");
 const { globalShortcut,ipcMain ,app,nativeImage,BrowserWindow,Tray,Menu, MenuItem,nativeTheme,screen } = require('electron')
 const {GoogleAuth} = require('./googleauth.js');
+const {ServerPush} = require('./serverpush.js');
 const {ServerNotification} = require('./servernotification.js');
 const {EventBus} = require("../v2/eventbus.js")
 import { DevicesServer } from "./serverdevices.js";
@@ -210,7 +211,16 @@ class Server{
             // console.log("Received gcmraw from page",gcmRaw)
             await this.sendToPage(gcmRaw);
         });
+        ipcMain.on("mydeviceid",(event)=>{
+            event.returnValue = ServerPush.deviceId;
+        });
         ipcMain.on("openurl",async (event,url)=>{
+            UtilServer.openUrlOrFile(url);
+        });
+        ipcMain.on("signin",async (event,{port})=>{
+            const redirectUri = `http://127.0.0.1:${port}`;
+            const url = GoogleAuth.getAuthUrl(redirectUri);
+            console.log("Opening Google sign-in",url);
             UtilServer.openUrlOrFile(url);
         });
         ipcMain.on("devices",async (event,raw)=>{
@@ -230,6 +240,13 @@ class Server{
         
         // ServerNotification.show({title:"Join Companion App1",body:"Now running1!"});
         this.autoUpdater.checkForUpdate();
+        this.push = new ServerPush({
+            onMessage: content => this.sendToPage(content),
+            onDeviceIdChanged: async () => {
+                this.window.webContents.send('usersignedin');
+            }
+        });
+        this.push.start().catch(error=>console.error("Couldn't start push receiver",error));
         return this.window;
         // const path = require('path');
     }
@@ -419,9 +436,9 @@ class Server{
     async sendToPageEventBus(object){
         await this.window.webContents.send('eventbus', {data:object,className:object.constructor.name});
     }
-    async handleAuthenticationRequest({code,res}){       
+    async handleAuthenticationRequest({code,res,redirectUri}){
         try{
-            const authData = await GoogleAuth.storeAuthData(code)   
+            const authData = await GoogleAuth.storeAuthData(code,redirectUri)   
             const isExpired = authData.isExpired;      
             console.log("Is Expired",isExpired);  
             if(!isExpired){
@@ -445,7 +462,7 @@ class Server{
         console.log(req.method,req.url)
         const code = queryData.code;
         if(code){
-            return await this.handleAuthenticationRequest({code:queryData.code,res})
+            return await this.handleAuthenticationRequest({code:queryData.code,res,redirectUri:`http://${req.headers.host}`})
         }
 
         try{
