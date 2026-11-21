@@ -25,6 +25,24 @@
 #appname{    
     display: none;
 }
+#appname.clickable{
+    display: block;
+    cursor: pointer;
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 4px 4px 4px 12px;
+    margin-left: 16px;
+    border-left: 1px solid rgba(255,255,255,0.5);
+}
+#appnamearrowdown.clickable{
+    cursor: pointer;
+}
+#appnamearrowdown svg{
+    width: 28px !important;
+    height: 28px !important;
+}
 #imagemenu{
     cursor: pointer;
     display: none;
