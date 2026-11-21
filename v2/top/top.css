@@ -80,12 +80,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 16px;
+    margin-right: 72px;
 }
-#userimage{
-	width: 36px;
-	height: 36px;
-	margin-top: 14px;
+#header #userimage{
+	width: 32px;
+	height: 32px;
+	object-fit: cover;
 	border-radius: 50%;
     cursor: pointer;
     margin-left: 8px;
@@ -156,8 +156,8 @@
 #topversion{    
     position: absolute;
     bottom: 2px;
-    right: 4px;
-    font-size: 85%;
+    right: 6px;
+    font-size: 70%;
 }
 @keyframes rotating {
 	from {	transform: rotate(0deg);	}
@@ -181,7 +181,7 @@
         padding-right: 0px;
     }
     #headerright{    
-        margin-right: 0px;
+        margin-right: 60px;
     }
     #userimage{
         display: none;
