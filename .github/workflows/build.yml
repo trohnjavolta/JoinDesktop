@@ -92,4 +92,6 @@ jobs:
           make_latest: false
           body: |
             Join Desktop for Debian/Ubuntu (64 bit, amd64) as .deb package.
-          files: dist/*.deb
+          files: |
+            dist/*.deb
+            linux/join-desktop.service

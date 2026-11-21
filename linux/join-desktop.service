@@ -1,0 +1,13 @@
+[Unit]
+Description=Join Desktop
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/join-desktop
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=graphical-session.target

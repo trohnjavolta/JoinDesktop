@@ -78,6 +78,7 @@
     "linux": {
       "icon": "build/icon.png",
       "category": "Utility",
+      "executableName": "join-desktop",
       "maintainer": "trohnjavolta <fabianrumer90@gmail.com>",
       "target": [
         "deb"

@@ -152,10 +152,14 @@ class Server{
     get isMacSystem(){
         return this.autoUpdater.isMacSystem;
     }
+    get staysInBackground(){
+        return !this.isMacSystem;
+    }
     async load(){   
         this.autoUpdater = new AutoUpdater(app);     
-        if(this.isWindowsSystem){
-            console.log("Is Windows. Will create tray icon!");
+        if(this.staysInBackground){
+            console.log("Will create tray icon!");
+            try{
             tray = new Tray(appIcon);
             tray.on("click",async()=>{
                 await this.bringWindowToFront();
@@ -165,6 +169,10 @@ class Server{
                 new MenuItem({ label: 'Open Join', type: 'normal', click:()=>this.bringWindowToFront() }),
                 new MenuItem({ label: 'Exit', type: 'normal', click:()=>this.onCloseAppClicked() })
             ]))
+            }catch(error){
+                console.log("Could not create tray icon",error);
+                tray = null;
+            }
         }
         app.on('second-instance',async ()=> await this.bringWindowToFront());
         await this.createWindow();
@@ -264,16 +272,16 @@ class Server{
     }
     async onStoredNotifications(storedNotifications){
         const image = storedNotifications && storedNotifications.options && storedNotifications.options.length > 0 ? appIconWithNotifications : appIcon;
-        tray.setImage(image);
+        if(tray) tray.setImage(image);
         await this.sendToPageEventBus(storedNotifications)
     }
     async onExistingNotifications(){
         console.log("Setting app icon with notifications");
-        tray.setImage(appIconWithNotifications);
+        if(tray) tray.setImage(appIconWithNotifications);
     }
     async onNoNotifications(){
         console.log("Setting normal app icon");
-        tray.setImage(appIcon);
+        if(tray) tray.setImage(appIcon);
     }
     async onRequestListenForShortcuts(request){
         const shortcuts = request.shortcuts;
@@ -351,7 +359,7 @@ class Server{
         app.quit();
     }
     async onMinimizeAppClicked(){
-        if(this.isWindowsSystem){
+        if(this.staysInBackground){
             this.window.minimize();
             this.window.hide();
             // tray.displayBalloon({title:"Still Running",content:"To close Join right click this icon."})
@@ -361,7 +369,7 @@ class Server{
         }
     }
     async onMinimizeToTaskBarAppClicked(args = {hideWindowIfWindows}){
-        if(args.hideWindowIfWindows && this.isWindowsSystem){
+        if(args.hideWindowIfWindows && this.staysInBackground){
             console.log("Is Windows and wants to hide window...")
             await this.onMinimizeAppClicked();
             return;
